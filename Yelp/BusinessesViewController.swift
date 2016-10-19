@@ -10,23 +10,28 @@ import UIKit
 
 class BusinessesViewController: UIViewController {
     
+    @IBOutlet weak var tableView: UITableView!
+    
     var businesses: [Business]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 120
+        
         Business.searchWithTerm(term: "Thai", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            
             self.businesses = businesses
+            self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
                     print(business.name!)
                     print(business.address!)
                 }
             }
-            
-            }
-        )
+        })
         
         /* Example of Yelp search with more search options specified
          Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
@@ -55,5 +60,26 @@ class BusinessesViewController: UIViewController {
      // Pass the selected object to the new view controller.
      }
      */
+    
+}
+
+// MARK - TableViewDelegate
+extension BusinessesViewController:UITableViewDelegate {
+    
+}
+
+// MARK - TableViewDataSource
+extension BusinessesViewController:UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return businesses?.count ?? 0
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
+        cell.business = businesses[indexPath.row]
+        
+        return cell
+    }
     
 }
