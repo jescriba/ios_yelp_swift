@@ -24,7 +24,7 @@ class FiltersViewController: UIViewController {
         super.viewDidLoad()
 
         categories = loadCategories()
-        filters.sections[.Category] = categories
+        filters.sections[.category] = categories
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -42,20 +42,20 @@ class FiltersViewController: UIViewController {
         for (indexPath, isSelected) in switchStates {
             let sectionID = FilterSectionID(rawValue: indexPath.section)!
             switch sectionID {
-            case .DealOffer:
+            case .dealOffer:
                 if isSelected {
                     filters["dealOffer"] = true as AnyObject
                 }
-                break
-            case .Category:
+            case .category:
                 if isSelected {
                     selectedCategories.append(categories[indexPath.row]["code"]!)
                 }
+            case .distance:
                 break
-            case .Distance:
-                break
-            case .SortBy:
-                break
+            case .sortBy:
+                if isSelected {
+                    filters["sortBy"] = self.filters.sections[sectionID]!.first as AnyObject
+                }
             }
         }
         if selectedCategories.count > 0 {
@@ -264,6 +264,35 @@ extension FiltersViewController:UITableViewDataSource {
 // MARK - TableViewDelegate
 extension FiltersViewController:UITableViewDelegate {
     
+    func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
+        let sectionID = FilterSectionID(rawValue: indexPath.section)!
+        let indexSet = IndexSet(integer: indexPath.section)
+        switch sectionID {
+        case .sortBy:
+            let sortModes = [YelpSortMode.bestMatched, YelpSortMode.distance, YelpSortMode.highestRated]
+            if filters.sections[sectionID]!.count == 1 {
+                filters.sections[sectionID] = sortModes
+            } else {
+                filters.sections[sectionID] = [sortModes[indexPath.row]]
+                switchStates[indexPath] = true
+            }
+            tableView.reloadSections(indexSet, with: .fade)
+        case .distance:
+            let distanceModes = [YelpDistanceMode.auto, YelpDistanceMode.closest, YelpDistanceMode.close, YelpDistanceMode.midRange, YelpDistanceMode.far]
+            if filters.sections[sectionID]!.count == 1 {
+                filters.sections[sectionID] = distanceModes
+            } else {
+                filters.sections[sectionID] = [distanceModes[indexPath.row]]
+                switchStates[indexPath] = true
+            }
+            tableView.reloadSections(indexSet, with: .fade)
+        default:
+            break
+        }
+        
+        return nil
+    }
+    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return section == 0 ? 0 : 50
     }
@@ -274,11 +303,11 @@ extension FiltersViewController:UITableViewDelegate {
         headerView.backgroundColor = UIColor(red:1.00, green:0.97, blue:0.96, alpha:1.0)
         
         let sectionID = FilterSectionID(rawValue: section)!
-        if sectionID != .DealOffer {
+        if sectionID != .dealOffer {
             let sectionID = FilterSectionID(rawValue: section)!
             let label = UILabel(frame: headerView.frame)
             label.textAlignment = .center
-            label.text = "\(sectionID)"
+            label.text = sectionID.simpleDescription()
             headerView.addSubview(label)
         }
         return headerView

@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="129"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="goS-d5-SgK" id="C9m-mo-6Ld">
-                                            <frame key="frameInset" width="375" height="128"/>
+                                            <frame key="frameInset" width="375" height="128.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="49p-xe-9px">
@@ -149,7 +149,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jbw-nf-TtV" id="neE-2K-5om">
-                                            <frame key="frameInset" width="375" height="49"/>
+                                            <frame key="frameInset" width="375" height="49.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knw-Xl-RMd">
@@ -158,15 +158,23 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hn1-KX-UqD"/>
+                                                <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W32-WY-oIc">
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                </view>
                                             </subviews>
                                             <constraints>
+                                                <constraint firstItem="W32-WY-oIc" firstAttribute="top" secondItem="neE-2K-5om" secondAttribute="top" constant="9.5" id="8sQ-xy-oJj"/>
+                                                <constraint firstItem="W32-WY-oIc" firstAttribute="centerY" secondItem="Hn1-KX-UqD" secondAttribute="centerY" id="97y-Up-0er"/>
                                                 <constraint firstItem="Hn1-KX-UqD" firstAttribute="centerY" secondItem="neE-2K-5om" secondAttribute="centerY" id="9jE-FP-Zp0"/>
                                                 <constraint firstItem="knw-Xl-RMd" firstAttribute="centerY" secondItem="neE-2K-5om" secondAttribute="centerY" id="JgQ-js-bsS"/>
+                                                <constraint firstAttribute="trailing" secondItem="W32-WY-oIc" secondAttribute="trailing" constant="15" id="LK0-Ya-Htg"/>
+                                                <constraint firstItem="W32-WY-oIc" firstAttribute="centerX" secondItem="Hn1-KX-UqD" secondAttribute="centerX" id="RSF-qG-T2F"/>
                                                 <constraint firstItem="knw-Xl-RMd" firstAttribute="leading" secondItem="neE-2K-5om" secondAttribute="leading" constant="15" id="aX2-nJ-fq7"/>
                                                 <constraint firstAttribute="trailing" secondItem="Hn1-KX-UqD" secondAttribute="trailing" constant="15" id="mha-Iz-9Wg"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="onSelection" destination="W32-WY-oIc" id="n5C-J6-75j"/>
                                             <outlet property="onSwitch" destination="Hn1-KX-UqD" id="SHU-B4-bcP"/>
                                             <outlet property="switchLabel" destination="knw-Xl-RMd" id="PD8-ZZ-ATP"/>
                                         </connections>

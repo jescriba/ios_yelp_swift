@@ -14,6 +14,7 @@ import UIKit
 
 class SwitchCell: UITableViewCell {
 
+    @IBOutlet weak var onSelection: UIView!
     @IBOutlet weak var onSwitch: UISwitch!
     @IBOutlet weak var switchLabel: UILabel!
     weak var delegate: SwitchCellDelegate?
@@ -22,14 +23,22 @@ class SwitchCell: UITableViewCell {
             guard let filterSection = filter.0 else { return }
             guard let filterValue = filter.1 else { return }
             switch filterSection {
-            case .DealOffer:
+            case .dealOffer:
                 switchLabel.text = "Offering a Deal"
-            case .Distance:
-                switchLabel.text = "Auto"
-            case .SortBy:
-                switchLabel.text = "Best Match"
-            case .Category:
+                onSwitch.isHidden = false
+                onSelection.isHidden = true
+            case .distance:
+                switchLabel.text = (filterValue as! YelpDistanceMode).simpleDescription()
+                onSwitch.isHidden = true
+                onSelection.isHidden = false
+            case .sortBy:
+                switchLabel.text = (filterValue as! YelpSortMode).simpleDescription()
+                onSwitch.isHidden = true
+                onSelection.isHidden = false
+            case .category:
                 switchLabel.text = (filterValue as! [String: String])["name"]
+                onSwitch.isHidden = false
+                onSelection.isHidden = true
             }
         }
     }
@@ -38,6 +47,8 @@ class SwitchCell: UITableViewCell {
         super.awakeFromNib()
         // Initialization code
         
+        onSelection.backgroundColor = UIColor(red:1.00, green:0.91, blue:0.96, alpha:1.0)
+        onSelection.layer.cornerRadius = 10
         onSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
     }
 

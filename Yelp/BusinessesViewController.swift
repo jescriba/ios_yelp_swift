@@ -90,7 +90,8 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         let categories = filters["categories"] as? [String]
         let dealOffer = filters["dealOffer"] as? Bool
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: dealOffer, completion: {
+        let sortBy = filters["sortBy"] as? YelpSortMode ?? YelpSortMode.bestMatched
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, completion: {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses

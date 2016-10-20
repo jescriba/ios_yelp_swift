@@ -9,7 +9,20 @@
 import Foundation
 
 enum FilterSectionID:Int {
-    case DealOffer, Distance, SortBy, Category
+    case dealOffer, distance, sortBy, category
+    
+    func simpleDescription() -> String {
+        switch self {
+        case .dealOffer:
+            return "Deal Offer"
+        case .distance:
+            return "Distance"
+        case .sortBy:
+            return "Sort By"
+        case .category:
+            return "Category"
+        }
+    }
 }
 
 class Filters {
@@ -17,10 +30,10 @@ class Filters {
     
     init() {
         sections = [FilterSectionID:[Any]]()
-        sections[.DealOffer] = [false]
-        sections[.Distance] = [1]
-        sections[.SortBy] = [1]
-        sections[.Category] = [String]()
+        sections[.dealOffer] = [false]
+        sections[.distance] = [YelpDistanceMode.auto]
+        sections[.sortBy] = [YelpSortMode.bestMatched]
+        sections[.category] = [String]()
     }
 
 }

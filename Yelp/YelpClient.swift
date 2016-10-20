@@ -17,8 +17,38 @@ let yelpConsumerSecret = "33QCvh5bIF5jIHR5klQr7RtBDhQ"
 let yelpToken = "uRcRswHFYa1VkDrGV6LAW2F8clGh5JHV"
 let yelpTokenSecret = "mqtKIxMIR4iBtBPZCmCLEb-Dz3Y"
 
+enum YelpDistanceMode:Int {
+    case auto, closest, close, midRange, far
+    
+    func simpleDescription() -> String {
+        switch self {
+        case .auto:
+            return "Auto"
+        case .closest:
+            return "0.3 miles"
+        case .close:
+            return "1 mile"
+        case .midRange:
+            return "5 miles"
+        case .far:
+            return "20 miles"
+        }
+    }
+}
+
 enum YelpSortMode: Int {
     case bestMatched = 0, distance, highestRated
+    
+    func simpleDescription() -> String {
+        switch self {
+        case .bestMatched:
+            return "Best Matched"
+        case .distance:
+            return "Distance"
+        case .highestRated:
+            return "Highest Rated"
+        }
+    }
 }
 
 class YelpClient: BDBOAuth1RequestOperationManager {
