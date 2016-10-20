@@ -17,6 +17,22 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var onSwitch: UISwitch!
     @IBOutlet weak var switchLabel: UILabel!
     weak var delegate: SwitchCellDelegate?
+    internal var filter: (FilterSectionID?, Any?) = (nil, nil) {
+        didSet {
+            guard let filterSection = filter.0 else { return }
+            guard let filterValue = filter.1 else { return }
+            switch filterSection {
+            case .DealOffer:
+                switchLabel.text = "Offering a Deal"
+            case .Distance:
+                switchLabel.text = "Auto"
+            case .SortBy:
+                switchLabel.text = "Best Match"
+            case .Category:
+                switchLabel.text = (filterValue as! [String: String])["name"]
+            }
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

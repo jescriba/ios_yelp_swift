@@ -89,7 +89,8 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
         let categories = filters["categories"] as? [String]
-        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil, completion: {
+        let dealOffer = filters["dealOffer"] as? Bool
+        Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: dealOffer, completion: {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
