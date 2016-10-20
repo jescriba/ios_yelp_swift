@@ -11,8 +11,9 @@ import UIKit
 class BusinessesViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
-    
-    var businesses: [Business]!
+    internal var businesses: [Business]!
+    internal var searchedBusinesses: [Business]!
+    private var searchBar: UISearchBar!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,8 +23,14 @@ class BusinessesViewController: UIViewController {
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 120
         
+        searchBar = UISearchBar()
+        searchBar.placeholder = "Restaurants"
+        searchBar.delegate = self
+        navigationItem.titleView = searchBar
+        
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
+            self.searchedBusinesses = businesses
             self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {
@@ -65,12 +72,12 @@ extension BusinessesViewController:UITableViewDelegate {
 extension BusinessesViewController:UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return businesses?.count ?? 0
+        return searchedBusinesses?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
-        cell.business = businesses[indexPath.row]
+        cell.business = searchedBusinesses[indexPath.row]
         
         return cell
     }
@@ -85,8 +92,27 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
         Business.searchWithTerm(term: "Restaurants", sort: nil, categories: categories, deals: nil, completion: {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
+            self.searchedBusinesses = businesses
             self.tableView.reloadData()
         })
+    }
+    
+}
+
+// MARK - SearchBarDelegate
+extension BusinessesViewController:UISearchBarDelegate {
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if !searchText.isEmpty {
+            searchedBusinesses = businesses.filter({($0.name?.contains(searchText))!})
+        } else {
+            searchedBusinesses = businesses
+        }
+        tableView.reloadData()
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.endEditing(true)
     }
     
 }

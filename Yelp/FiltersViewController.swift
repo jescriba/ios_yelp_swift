@@ -16,7 +16,7 @@ class FiltersViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     weak var delegate: FiltersViewControllerDelegate?
-    var switchStates = [Int:Bool]()
+    internal var switchStates = [Int:Bool]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
