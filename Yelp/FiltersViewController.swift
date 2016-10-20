@@ -40,7 +40,7 @@ class FiltersViewController: UIViewController {
             }
         }
         if selectedCategories.count > 0 {
-            filters["categories"] = selectedCategories
+            filters["categories"] = selectedCategories as AnyObject
         }
         delegate?.filtersViewController?(filtersViewController: self, didUpdateFilters: filters)
     }
