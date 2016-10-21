@@ -51,7 +51,9 @@ class FiltersViewController: UIViewController {
                     selectedCategories.append(categories[indexPath.row]["code"]!)
                 }
             case .distance:
-                break
+                if isSelected {
+                    filters["distance"] = self.filters.sections[sectionID]!.first as AnyObject
+                }
             case .sortBy:
                 if isSelected {
                     filters["sortBy"] = self.filters.sections[sectionID]!.first as AnyObject

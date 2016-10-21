@@ -40,17 +40,16 @@ class BusinessesViewController: UIViewController {
             }
         })
         
-        /* Example of Yelp search with more search options specified
-         Business.searchWithTerm("Restaurants", sort: .Distance, categories: ["asianfusion", "burgers"], deals: true) { (businesses: [Business]!, error: NSError!) -> Void in
-         self.businesses = businesses
-         
-         for business in businesses {
-         print(business.name!)
-         print(business.address!)
-         }
-         }
-         */
-        
+    }
+    
+    internal func filterByDistance(_ yelpDistance: YelpDistanceMode) {
+        let distanceDescription = yelpDistance.simpleDescription()
+        let distance = Double(distanceDescription.components(separatedBy: " ").first!)
+        businesses = businesses.filter({ (business:Business) -> Bool in
+            let businessDistance = Double((business.distance?.components(separatedBy: " ").first!)!)
+            return businessDistance! < distance!
+        })
+        searchedBusinesses = businesses
     }
     
      // MARK: - Navigation
@@ -95,6 +94,9 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
+            if let distance = filters["distance"] {
+                self.filterByDistance(distance as! YelpDistanceMode)
+            }
             self.tableView.reloadData()
         })
     }
