@@ -26,6 +26,8 @@ class BusinessesViewController: UIViewController {
         searchBar = UISearchBar()
         searchBar.placeholder = "Restaurants"
         searchBar.delegate = self
+        let searchTextField = searchBar.value(forKey: "searchField") as? UITextField
+        searchTextField?.textColor = UIColor(red:0.17, green:0.06, blue:0.68, alpha:1.0)
         navigationItem.titleView = searchBar
         
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
