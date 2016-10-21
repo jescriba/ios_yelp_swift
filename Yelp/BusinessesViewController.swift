@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CircularSpinner
 
 class BusinessesViewController: UIViewController {
     
@@ -30,9 +31,11 @@ class BusinessesViewController: UIViewController {
         searchTextField?.textColor = UIColor(red:0.17, green:0.06, blue:0.68, alpha:1.0)
         navigationItem.titleView = searchBar
         
+        CircularSpinner.show("Loading...", animated: true, type: .indeterminate)
         Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
+            CircularSpinner.hide()
             self.tableView.reloadData()
             if let businesses = businesses {
                 for business in businesses {

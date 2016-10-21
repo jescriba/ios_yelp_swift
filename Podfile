@@ -6,6 +6,7 @@ target 'Yelp' do
   use_frameworks!
 
   # Pods for Yelp
+  pod 'CircularSpinner'
   pod 'AFNetworking', '~> 2.5'
   pod 'BDBOAuth1Manager'
 
