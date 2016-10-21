@@ -17,11 +17,14 @@ class SwitchCell: UITableViewCell {
     @IBOutlet weak var onSelection: UIView!
     @IBOutlet weak var onSwitch: UISwitch!
     @IBOutlet weak var switchLabel: UILabel!
+    @IBOutlet weak var onSelectionLabel: UILabel!
+    
     weak var delegate: SwitchCellDelegate?
     internal var filter: (FilterSectionID?, Any?) = (nil, nil) {
         didSet {
             guard let filterSection = filter.0 else { return }
             guard let filterValue = filter.1 else { return }
+            switchLabel.textColor = UIColor.black
             switch filterSection {
             case .dealOffer:
                 switchLabel.text = "Offering a Deal"
@@ -37,8 +40,16 @@ class SwitchCell: UITableViewCell {
                 onSelection.isHidden = false
             case .category:
                 switchLabel.text = (filterValue as! [String: String])["name"]
-                onSwitch.isHidden = false
-                onSelection.isHidden = true
+                if switchLabel.text == "See All" {
+                    onSwitch.isHidden = true
+                    onSelection.isHidden = false
+                    switchLabel.textColor = UIColor(red:0.63, green:0.63, blue:0.63, alpha:1.0)
+                } else {
+                    onSwitch.isHidden = false
+                    onSelection.isHidden = true
+                    switchLabel.textAlignment = .natural
+                    switchLabel.textColor = UIColor.black
+                }
             }
         }
     }
@@ -46,16 +57,9 @@ class SwitchCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        
-        onSelection.backgroundColor = UIColor(red:1.00, green:0.91, blue:0.96, alpha:1.0)
-        onSelection.layer.cornerRadius = 10
+
+        onSelection.layer.cornerRadius = 15
         onSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
-    }
-
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-        // Configure the view for the selected state
     }
     
     func switchValueChanged() {

@@ -159,7 +159,20 @@
                                                 </label>
                                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Hn1-KX-UqD"/>
                                                 <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="W32-WY-oIc">
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <subviews>
+                                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="▾" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Dd-Qw-mBW">
+                                                            <frame key="frameInset" width="30" height="30"/>
+                                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="30"/>
+                                                            <color key="textColor" red="0.40047200520833331" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                            <nil key="highlightedColor"/>
+                                                        </label>
+                                                    </subviews>
+                                                    <color key="backgroundColor" red="1" green="0.93486870659722221" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="30" id="0lW-uO-qbj"/>
+                                                        <constraint firstAttribute="width" constant="30" id="3g9-Hk-kmh"/>
+                                                    </constraints>
                                                 </view>
                                             </subviews>
                                             <constraints>
@@ -167,7 +180,6 @@
                                                 <constraint firstItem="W32-WY-oIc" firstAttribute="centerY" secondItem="Hn1-KX-UqD" secondAttribute="centerY" id="97y-Up-0er"/>
                                                 <constraint firstItem="Hn1-KX-UqD" firstAttribute="centerY" secondItem="neE-2K-5om" secondAttribute="centerY" id="9jE-FP-Zp0"/>
                                                 <constraint firstItem="knw-Xl-RMd" firstAttribute="centerY" secondItem="neE-2K-5om" secondAttribute="centerY" id="JgQ-js-bsS"/>
-                                                <constraint firstAttribute="trailing" secondItem="W32-WY-oIc" secondAttribute="trailing" constant="15" id="LK0-Ya-Htg"/>
                                                 <constraint firstItem="W32-WY-oIc" firstAttribute="centerX" secondItem="Hn1-KX-UqD" secondAttribute="centerX" id="RSF-qG-T2F"/>
                                                 <constraint firstItem="knw-Xl-RMd" firstAttribute="leading" secondItem="neE-2K-5om" secondAttribute="leading" constant="15" id="aX2-nJ-fq7"/>
                                                 <constraint firstAttribute="trailing" secondItem="Hn1-KX-UqD" secondAttribute="trailing" constant="15" id="mha-Iz-9Wg"/>
@@ -175,6 +187,7 @@
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="onSelection" destination="W32-WY-oIc" id="n5C-J6-75j"/>
+                                            <outlet property="onSelectionLabel" destination="9Dd-Qw-mBW" id="aIc-oi-XWB"/>
                                             <outlet property="onSwitch" destination="Hn1-KX-UqD" id="SHU-B4-bcP"/>
                                             <outlet property="switchLabel" destination="knw-Xl-RMd" id="PD8-ZZ-ATP"/>
                                         </connections>

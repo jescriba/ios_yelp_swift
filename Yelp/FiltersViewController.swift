@@ -24,7 +24,8 @@ class FiltersViewController: UIViewController {
         super.viewDidLoad()
 
         categories = loadCategories()
-        filters.sections[.category] = categories
+        filters.sections[.category] = categories.first(n: 4)
+        filters.sections[.category]?.append(["name": "See All", "code": "See All"])
         tableView.dataSource = self
         tableView.delegate = self
         tableView.tableFooterView = UIView(frame: CGRect.zero)
@@ -52,11 +53,13 @@ class FiltersViewController: UIViewController {
                 }
             case .distance:
                 if isSelected {
-                    filters["distance"] = self.filters.sections[sectionID]!.first as AnyObject
+                    let firstDistance = self.filters.sections[sectionID]?.first as! YelpDistanceMode
+                    filters["distance"] = firstDistance as AnyObject
                 }
             case .sortBy:
                 if isSelected {
-                    filters["sortBy"] = self.filters.sections[sectionID]!.first as AnyObject
+                    let firstSort = self.filters.sections[sectionID]?.first as! YelpSortMode
+                    filters["sortBy"] = firstSort as AnyObject
                 }
             }
         }
@@ -267,27 +270,48 @@ extension FiltersViewController:UITableViewDataSource {
 extension FiltersViewController:UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let sectionID = FilterSectionID(rawValue: indexPath.section)!
-        let indexSet = IndexSet(integer: indexPath.section)
+        let section = indexPath.section
+        let sectionID = FilterSectionID(rawValue: section)!
+        let indexSet = IndexSet(integer: section)
         switch sectionID {
         case .sortBy:
-            let sortModes = [YelpSortMode.bestMatched, YelpSortMode.distance, YelpSortMode.highestRated]
+            var sortModes = [YelpSortMode.bestMatched, YelpSortMode.distance, YelpSortMode.highestRated]
+            let initialPreference = filters.sections[sectionID]?.first!
+            sortModes = bringToTop(array: sortModes, sortMode: initialPreference as? YelpSortMode) as! [YelpSortMode]
+            var isExpanded = false
             if filters.sections[sectionID]!.count == 1 {
+                // Expand Sort Modes
+                isExpanded = true
                 filters.sections[sectionID] = sortModes
             } else {
+                // Collapse Sort Modes
                 filters.sections[sectionID] = [sortModes[indexPath.row]]
                 switchStates[indexPath] = true
             }
             tableView.reloadSections(indexSet, with: .fade)
+            updateSectionSelectionLabels(section, isExpanded: isExpanded)
         case .distance:
-            let distanceModes = [YelpDistanceMode.auto, YelpDistanceMode.closest, YelpDistanceMode.close, YelpDistanceMode.midRange, YelpDistanceMode.far]
+            var distanceModes = [YelpDistanceMode.auto, YelpDistanceMode.closest, YelpDistanceMode.close, YelpDistanceMode.midRange, YelpDistanceMode.far]
+            let initialPreference = filters.sections[sectionID]?.first!
+            distanceModes = bringToTop(array: distanceModes, distanceMode: initialPreference as? YelpDistanceMode) as! [YelpDistanceMode]
+            var isExpanded = false
             if filters.sections[sectionID]!.count == 1 {
+                // Expand Distance Modes
+                isExpanded = true
                 filters.sections[sectionID] = distanceModes
             } else {
+                // Collapse Distance Modes
                 filters.sections[sectionID] = [distanceModes[indexPath.row]]
                 switchStates[indexPath] = true
             }
             tableView.reloadSections(indexSet, with: .fade)
+            updateSectionSelectionLabels(section, isExpanded: isExpanded)
+
+        case .category:
+            if (filters.sections[sectionID]?.count)! < categories.count {
+                filters.sections[sectionID] = categories
+                tableView.reloadSections(indexSet, with: .fade)
+            }
         default:
             break
         }
@@ -315,6 +339,56 @@ extension FiltersViewController:UITableViewDelegate {
         return headerView
     }
     
+    private func updateSectionSelectionLabels(_ section: Int, isExpanded: Bool) {
+        for i in 0...(tableView.numberOfRows(inSection: section) - 1) {
+            let indexPath = IndexPath(row: i, section: section)
+            let cell = tableView.cellForRow(at: indexPath) as! SwitchCell
+            if isExpanded {
+                if i != 0 {
+                    cell.onSelectionLabel.text = "・"
+                } else {
+                    cell.onSelectionLabel.text = "✔︎"
+                }
+            } else {
+                cell.onSelectionLabel.text = "▾"
+            }
+        }
+    }
+    
+    private func bringToTop(array: [Any], sortMode: YelpSortMode? = nil, distanceMode: YelpDistanceMode? = nil) -> [Any] {
+        if let sortMode = sortMode {
+            var sortArray = array as! [YelpSortMode]
+            var index: Int!
+            for (i, val) in sortArray.enumerated() {
+                if val == sortMode {
+                    index = i
+                    break
+                }
+            }
+            if let index = index {
+                sortArray.remove(at: index)
+                sortArray.insert(sortMode, at: 0)
+                return sortArray
+            }
+        }
+        if let distanceMode = distanceMode {
+            var distanceArray = array as! [YelpDistanceMode]
+            var index: Int!
+            for (i, val) in distanceArray.enumerated() {
+                if val == distanceMode {
+                    index = i
+                    break
+                }
+            }
+            if let index = index {
+                distanceArray.remove(at: index)
+                distanceArray.insert(distanceMode, at: 0)
+                return distanceArray
+            }
+        }
+        return array
+    }
+    
 }
 
 // MARK - SwitchCellDelegate
@@ -325,4 +399,18 @@ extension FiltersViewController:SwitchCellDelegate {
         
         switchStates[indexPath] = value
     }
+}
+
+extension Array {
+    
+    func first(n: Int) -> Array {
+        var newArray = Array()
+        for (index, el) in self.enumerated() {
+            if index < n {
+                newArray.append(el)
+            }
+        }
+        return newArray
+    }
+    
 }
