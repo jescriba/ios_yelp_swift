@@ -59,6 +59,7 @@ class SwitchCell: UITableViewCell {
         // Initialization code
 
         onSelection.layer.cornerRadius = 15
+        onSwitch.layer.cornerRadius = 16
         onSwitch.addTarget(self, action: #selector(switchValueChanged), for: .valueChanged)
     }
     

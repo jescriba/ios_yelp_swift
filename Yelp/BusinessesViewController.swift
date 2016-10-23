@@ -31,6 +31,8 @@ class BusinessesViewController: UIViewController {
         tableView.estimatedRowHeight = 120
         
         searchBar = UISearchBar()
+        searchBar.tintColor = UIColor.clear
+        searchBar.backgroundImage = UIImage()
         searchBar.placeholder = "Restaurants"
         searchBar.delegate = self
         let searchTextField = searchBar.value(forKey: "searchField") as? UITextField
@@ -45,8 +47,6 @@ class BusinessesViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(BusinessesViewController.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 
         setUpMapView()
-        
-        searchRestaurants()
     }
     
     internal func rotated() {
@@ -109,16 +109,27 @@ class BusinessesViewController: UIViewController {
     
      // MARK: - Navigation
      override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let navigationController = segue.destination as! UINavigationController
-        let filtersViewController = navigationController.topViewController as! FiltersViewController
-        
-        filtersViewController.delegate = self
+        let businessDetailController = segue.destination as? BusinessDetailViewController
+        let navigationController = segue.destination as? UINavigationController
+        if let navController = navigationController {
+            let filtersViewController = navController.topViewController as! FiltersViewController
+            
+            filtersViewController.delegate = self
+        }
+        if let businessDetailVC = businessDetailController {
+            let businessCell = sender as! BusinessCell
+            businessDetailVC.business = businessCell.business
+        }
      }
     
 }
 
 // MARK - TableViewDelegate
 extension BusinessesViewController:UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+    }
     
 }
 
@@ -203,7 +214,9 @@ extension BusinessesViewController:MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         let yelpAnnotation = view.annotation as! YelpAnnotation
         let business = yelpAnnotation.business
-        // Handle navigation
+        let businessDetailVC = storyboard?.instantiateViewController(withIdentifier: "BusinessDetailViewController") as! BusinessDetailViewController
+        businessDetailVC.business = business
+        navigationController?.pushViewController(businessDetailVC, animated: true)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

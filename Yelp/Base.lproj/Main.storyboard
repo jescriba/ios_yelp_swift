@@ -22,10 +22,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BusinessCell" rowHeight="129" id="goS-d5-SgK" customClass="BusinessCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="129"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="129"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="goS-d5-SgK" id="C9m-mo-6Ld">
-                                            <frame key="frameInset" width="1000" height="128.5"/>
+                                            <frame key="frameInset" width="375" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="49p-xe-9px">
@@ -102,6 +102,7 @@
                                             <outlet property="ratingImageView" destination="Qrx-9g-O6K" id="EA3-FN-81T"/>
                                             <outlet property="reviewsCountLabel" destination="y8D-q1-1dS" id="TPl-Sc-WYP"/>
                                             <outlet property="thumbImageView" destination="49p-xe-9px" id="EcH-aT-qhi"/>
+                                            <segue destination="qcL-jB-bs9" kind="show" id="vsH-Xe-fZR"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
@@ -162,10 +163,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="50" id="Jbw-nf-TtV" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="50"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jbw-nf-TtV" id="neE-2K-5om">
-                                            <frame key="frameInset" width="375" height="49.5"/>
+                                            <frame key="frameInset" width="1000" height="49"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knw-Xl-RMd">
@@ -189,7 +190,11 @@
                                                         <constraint firstAttribute="width" constant="30" id="3g9-Hk-kmh"/>
                                                     </constraints>
                                                 </view>
-                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KDv-9j-9Pg"/>
+                                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="KDv-9j-9Pg">
+                                                    <color key="backgroundColor" red="0.99232441023284301" green="0.91450929330065356" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="onTintColor" red="0.4823529411764706" green="0.29019607843137252" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <color key="thumbTintColor" red="0.97261444291258159" green="0.72541743259803915" blue="0.90980392156862744" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                </switch>
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="trailing" secondItem="W32-WY-oIc" secondAttribute="trailing" constant="15" id="HI9-74-gwc"/>
@@ -275,6 +280,86 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="32e-a7-mdx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3394" y="358"/>
+        </scene>
+        <!--Yelp-->
+        <scene sceneID="qBk-wP-6hA">
+            <objects>
+                <viewController storyboardIdentifier="BusinessDetailViewController" id="qcL-jB-bs9" customClass="BusinessDetailViewController" customModule="Yelp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Nb2-H2-69l"/>
+                        <viewControllerLayoutGuide type="bottom" id="fyk-SD-O47"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Ter-tq-ctR">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Pho Bac Hoa Viet" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LA7-ZS-D4U">
+                                <frame key="frameInset" minX="16" minY="83" width="343" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Vietnamese, Chinese" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xhb-Q4-fi8">
+                                <frame key="frameInset" minX="111" minY="141" width="162" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="4708 Auburn Blvd" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LXT-mw-EwF">
+                                <frame key="frameInset" minX="221" minY="186" width="138" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="H0o-pp-bAC">
+                                <frame key="frameInset" minX="111" minY="112" width="152" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Open Now" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xhy-Sm-kWv">
+                                <frame key="frameInset" minX="111" minY="162" width="81" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" red="0.30097113715277779" green="0.0" blue="0.59353298611111116" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Call 555-555-5555" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kYh-EX-bR8">
+                                <frame key="frameInset" minX="16" minY="186" width="150" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="110 Reviews" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPs-44-Okt">
+                                <frame key="frameInset" minX="271" minY="112" width="93" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <color key="textColor" red="0.33038546954314718" green="0.33038546954314718" blue="0.33038546954314718" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Pgp-Yh-KPF">
+                                <frame key="frameInset" minY="469" width="375" height="198"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="This restaurant was awesome I would eat there again and again because of the bomb fried chicken" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hAE-6n-AJH">
+                                <frame key="frameInset" minX="5" minY="215" width="364" height="145"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <color key="textColor" red="0.36575794449680243" green="0.33707104688921008" blue="0.33707104688921008" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <navigationItem key="navigationItem" title="Yelp" id="rG7-sU-ESx">
+                        <barButtonItem key="backBarButtonItem" title="Restaurants" id="cJC-9u-XvQ"/>
+                    </navigationItem>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lcj-mV-fgt" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3392.8000000000002" y="1020.5397301349326"/>
         </scene>
     </scenes>
     <resources>

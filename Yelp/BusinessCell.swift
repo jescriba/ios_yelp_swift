@@ -36,11 +36,15 @@ class BusinessCell: UITableViewCell {
         
         thumbImageView.layer.cornerRadius = 3
         thumbImageView.clipsToBounds = true
+        
+        let bgColorView = UIView()
+        bgColorView.backgroundColor = UIColor(red:1.00, green:0.90, blue:0.96, alpha:1.0)
+        selectedBackgroundView = bgColorView
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
+        
         // Configure the view for the selected state
     }
 
