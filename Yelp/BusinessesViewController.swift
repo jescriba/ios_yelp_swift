@@ -7,13 +7,19 @@
 //
 
 import UIKit
+import MapKit
+import CoreLocation
 import CircularSpinner
 
 class BusinessesViewController: UIViewController {
     
+    @IBOutlet var mapView: MKMapView!
+    @IBOutlet weak var listMapSegmentControl: UISegmentedControl!
     @IBOutlet weak var tableView: UITableView!
     internal var businesses: [Business]!
     internal var searchedBusinesses: [Business]!
+    internal var coordinate: Coordinate = Coordinate.sanFrancisco()
+    private var locationManager : CLLocationManager!
     private var searchBar: UISearchBar!
     
     override func viewDidLoad() {
@@ -31,20 +37,20 @@ class BusinessesViewController: UIViewController {
         searchTextField?.textColor = UIColor(red:0.17, green:0.06, blue:0.68, alpha:1.0)
         navigationItem.titleView = searchBar
         
-        CircularSpinner.show("Loading...", animated: true, type: .indeterminate)
-        Business.searchWithTerm(term: "Restaurants", completion: { (businesses: [Business]?, error: Error?) -> Void in
-            self.businesses = businesses
-            self.searchedBusinesses = businesses
-            CircularSpinner.hide()
-            self.tableView.reloadData()
-            if let businesses = businesses {
-                for business in businesses {
-                    print(business.name!)
-                    print(business.address!)
-                }
-            }
-        })
+        listMapSegmentControl.tintColor = UIColor(red:0.27, green:0.11, blue:0.72, alpha:1.0)
+        listMapSegmentControl.addTarget(self, action: #selector(listMapValueChanged), for: .valueChanged)
+        mapView.delegate = self
         
+        // Handle rotation for mapview
+        NotificationCenter.default.addObserver(self, selector: #selector(BusinessesViewController.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+
+        setUpMapView()
+        
+        searchRestaurants()
+    }
+    
+    internal func rotated() {
+        mapView.frame = tableView.frame
     }
     
     internal func filterByDistance(_ yelpDistance: YelpDistanceMode) {
@@ -55,6 +61,49 @@ class BusinessesViewController: UIViewController {
             return businessDistance! < distance!
         })
         searchedBusinesses = businesses
+    }
+    
+    internal func searchRestaurants() {
+        CircularSpinner.show("Loading...", animated: true, type: .indeterminate)
+        Business.searchWithTerm(term: "Restaurants", coordinate: coordinate, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            self.businesses = businesses
+            self.searchedBusinesses = businesses
+            CircularSpinner.hide()
+            self.tableView.reloadData()
+        })
+    }
+    
+    internal func setupMapAnnotations() {
+        for business in searchedBusinesses {
+            let businessCoordinate = business.coordinate?.toCLLocationCoordinate2D()
+            if businessCoordinate != nil {
+                let annotation = YelpAnnotation(title: business.name!, coordinate: businessCoordinate!)
+                mapView.addAnnotation(annotation)
+            }
+        }
+    }
+    
+    @objc private func listMapValueChanged() {
+        let index = listMapSegmentControl.selectedSegmentIndex
+        if index == 0 {
+            // Set up List
+            mapView.isHidden = true
+            tableView.isHidden = false
+        } else {
+            // Set up Map View
+            mapView.frame = tableView.frame
+            mapView.isHidden = false
+            tableView.isHidden = true
+            setupMapAnnotations()
+        }
+    }
+    
+    private func setUpMapView() {
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+        locationManager.distanceFilter = 200
+        locationManager.requestWhenInUseAuthorization()
     }
     
      // MARK: - Navigation
@@ -95,7 +144,7 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
         let categories = filters["categories"] as? [String]
         let dealOffer = filters["dealOffer"] as? Bool
         let sortBy = filters["sortBy"] as? YelpSortMode ?? YelpSortMode.bestMatched
-        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, completion: {
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: self.coordinate, completion: {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
@@ -122,6 +171,51 @@ extension BusinessesViewController:UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.endEditing(true)
+    }
+    
+}
+
+// MARK - CLLocationManagerDelegate
+extension BusinessesViewController:CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        if status == .authorizedWhenInUse {
+            manager.startUpdatingLocation()
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        if let location = locations.first {
+            coordinate = Coordinate(location: location.coordinate)
+            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            let region = MKCoordinateRegion(center: location.coordinate, span: span)
+            mapView.setRegion(region, animated: false)
+            searchRestaurants()
+        }
+    }
+}
+
+// MARK - MKMapViewDelegate
+extension BusinessesViewController:MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        let identifier = "customAnnotationView"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        if (annotationView == nil) {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+        }
+        else {
+            annotationView!.annotation = annotation
+        }
+        annotationView!.image = UIImage(named: "map_pin")
+        
+        return annotationView
     }
     
 }

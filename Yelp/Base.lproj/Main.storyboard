@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="129"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="goS-d5-SgK" id="C9m-mo-6Ld">
-                                            <frame key="frameInset" width="375" height="128.5"/>
+                                            <frame key="frameInset" width="375" height="128"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="49p-xe-9px">
@@ -106,6 +106,10 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <mapView hidden="YES" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="wbH-77-Y8Y">
+                                <frame key="frameInset" minX="67" minY="269" width="240" height="128"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </mapView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
@@ -121,8 +125,20 @@
                                 <segue destination="yTs-ha-iz1" kind="presentation" id="AaE-Vg-bNK"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="5IR-Lp-CSC">
+                            <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" id="1qp-V4-Zeu">
+                                <rect key="frame" x="286" y="7" width="73" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <segments>
+                                    <segment title="" image="list"/>
+                                    <segment title="" image="map"/>
+                                </segments>
+                            </segmentedControl>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="listMapSegmentControl" destination="1qp-V4-Zeu" id="xtH-a6-1dm"/>
+                        <outlet property="mapView" destination="wbH-77-Y8Y" id="KUz-b4-ioE"/>
                         <outlet property="tableView" destination="fsd-K6-Buk" id="JNu-PC-1ZX"/>
                     </connections>
                 </viewController>
@@ -260,4 +276,8 @@
             <point key="canvasLocation" x="3394" y="358"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="list" width="18" height="18"/>
+        <image name="map" width="18" height="18"/>
+    </resources>
 </document>

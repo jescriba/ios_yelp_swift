@@ -11,6 +11,7 @@ import UIKit
 class Business: NSObject {
     let name: String?
     let address: String?
+    let coordinate: Coordinate?
     let imageURL: URL?
     let categories: String?
     let distance: String?
@@ -29,6 +30,7 @@ class Business: NSObject {
         
         let location = dictionary["location"] as? NSDictionary
         var address = ""
+        var coordinate = Coordinate()
         if location != nil {
             let addressArray = location!["address"] as? NSArray
             if addressArray != nil && addressArray!.count > 0 {
@@ -42,7 +44,10 @@ class Business: NSObject {
                 }
                 address += neighborhoods![0] as! String
             }
+            let coordinateDict = location!["coordinate"] as? NSDictionary
+            coordinate = Coordinate(dictionary: coordinateDict)
         }
+        self.coordinate = coordinate
         self.address = address
         
         let categoriesArray = dictionary["categories"] as? [[String]]
@@ -84,11 +89,11 @@ class Business: NSObject {
         return businesses
     }
     
-    class func searchWithTerm(term: String, completion: @escaping ([Business]?, Error?) -> Void) {
-        _ = YelpClient.sharedInstance.searchWithTerm(term, completion: completion)
+    class func searchWithTerm(term: String, coordinate: Coordinate?, completion: @escaping ([Business]?, Error?) -> Void) {
+        _ = YelpClient.sharedInstance.searchWithTerm(term, coordinate: coordinate, completion: completion)
     }
     
-    class func searchWithTerm(term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, completion: @escaping ([Business]?, Error?) -> Void) -> Void {
-        _ = YelpClient.sharedInstance.searchWithTerm(term, sort: sort, categories: categories, deals: deals, completion: completion)
+    class func searchWithTerm(term: String, sort: YelpSortMode?, categories: [String]?, deals: Bool?, coordinate: Coordinate?, completion: @escaping ([Business]?, Error?) -> Void) -> Void {
+        _ = YelpClient.sharedInstance.searchWithTerm(term, sort: sort, categories: categories, deals: deals, coordinate: coordinate, completion: completion)
     }
 }
