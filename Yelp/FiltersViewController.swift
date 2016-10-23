@@ -18,6 +18,7 @@ class FiltersViewController: UIViewController {
     weak var delegate: FiltersViewControllerDelegate?
     internal var categories: [[String:String]]!
     internal var switchStates = [IndexPath:Bool]()
+    internal var selectionState = [IndexPath:String]()
     internal var filters = Filters()
     
     override func viewDidLoad() {
@@ -261,6 +262,7 @@ extension FiltersViewController:UITableViewDataSource {
         cell.filter = (filterID, filters.sections[filterID]?[indexPath.row])
         cell.delegate = self
         cell.onSwitch.isOn = switchStates[indexPath] ?? false
+        cell.onSelectionLabel.text = selectionState[indexPath] ?? "▾"
         
         return cell;
     }
@@ -345,11 +347,14 @@ extension FiltersViewController:UITableViewDelegate {
             let cell = tableView.cellForRow(at: indexPath) as! SwitchCell
             if isExpanded {
                 if i != 0 {
+                    selectionState[indexPath] = "・"
                     cell.onSelectionLabel.text = "・"
                 } else {
+                    selectionState[indexPath] = "✔︎"
                     cell.onSelectionLabel.text = "✔︎"
                 }
             } else {
+                selectionState[indexPath] = "▾"
                 cell.onSelectionLabel.text = "▾"
             }
         }
