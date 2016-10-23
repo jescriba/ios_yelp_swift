@@ -74,10 +74,11 @@ class BusinessesViewController: UIViewController {
     }
     
     internal func setupMapAnnotations() {
+        mapView.removeAnnotations(mapView.annotations)
         for business in searchedBusinesses {
             let businessCoordinate = business.coordinate?.toCLLocationCoordinate2D()
             if businessCoordinate != nil {
-                let annotation = YelpAnnotation(title: business.name!, coordinate: businessCoordinate!)
+                let annotation = YelpAnnotation(business: business, coordinate: businessCoordinate!)
                 mapView.addAnnotation(annotation)
             }
         }
@@ -152,6 +153,7 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
                 self.filterByDistance(distance as! YelpDistanceMode)
             }
             self.tableView.reloadData()
+            self.setupMapAnnotations()
         })
     }
     
@@ -187,7 +189,7 @@ extension BusinessesViewController:CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             coordinate = Coordinate(location: location.coordinate)
-            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: false)
             searchRestaurants()
@@ -197,6 +199,12 @@ extension BusinessesViewController:CLLocationManagerDelegate {
 
 // MARK - MKMapViewDelegate
 extension BusinessesViewController:MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let yelpAnnotation = view.annotation as! YelpAnnotation
+        let business = yelpAnnotation.business
+        // Handle navigation
+    }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         
@@ -213,6 +221,9 @@ extension BusinessesViewController:MKMapViewDelegate {
         else {
             annotationView!.annotation = annotation
         }
+        
+        let annotationButton = UIButton(type: .detailDisclosure)
+        annotationView!.rightCalloutAccessoryView = annotationButton
         annotationView!.image = UIImage(named: "map_pin")
         
         return annotationView

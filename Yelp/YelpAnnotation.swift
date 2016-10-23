@@ -11,10 +11,12 @@ import MapKit
 
 class YelpAnnotation:NSObject, MKAnnotation {
     var title: String?
+    var business: Business?
     let coordinate: CLLocationCoordinate2D
     
-    init(title: String, coordinate: CLLocationCoordinate2D) {
-        self.title = title
+    init(business: Business, coordinate: CLLocationCoordinate2D) {
+        self.business = business
+        self.title = business.name
         self.coordinate = coordinate
         
         super.init()
