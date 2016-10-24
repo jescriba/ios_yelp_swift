@@ -19,6 +19,10 @@ class BusinessesViewController: UIViewController {
     internal var businesses: [Business]!
     internal var searchedBusinesses: [Business]!
     internal var coordinate: Coordinate = Coordinate.sanFrancisco()
+    internal var categories: [String]?
+    internal var dealOffer: Bool?
+    internal var sortBy: YelpSortMode? = YelpSortMode.bestMatched
+    internal var distance: YelpDistanceMode?
     private var locationManager : CLLocationManager!
     private var searchBar: UISearchBar!
     private var refreshControl: UIRefreshControl!
@@ -70,11 +74,15 @@ class BusinessesViewController: UIViewController {
     
     internal func searchRestaurants() {
         CircularSpinner.show("Loading...", animated: true, type: .indeterminate)
-        Business.searchWithTerm(term: "Restaurants", coordinate: coordinate, completion: { (businesses: [Business]?, error: Error?) -> Void in
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: coordinate, limit: nil, offset: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
+            if let distance = self.distance {
+                self.filterByDistance(distance)
+            }
             CircularSpinner.hide()
             self.tableView.reloadData()
+            self.setupMapAnnotations()
             self.refreshControl.endRefreshing()
         })
     }
@@ -159,15 +167,16 @@ extension BusinessesViewController:UITableViewDataSource {
 extension BusinessesViewController:FiltersViewControllerDelegate {
     
     func filtersViewController(filtersViewController: FiltersViewController, didUpdateFilters filters: [String : AnyObject]) {
-        let categories = filters["categories"] as? [String]
-        let dealOffer = filters["dealOffer"] as? Bool
-        let sortBy = filters["sortBy"] as? YelpSortMode ?? YelpSortMode.bestMatched
-        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: self.coordinate, completion: {
+        categories = filters["categories"] as? [String]
+        dealOffer = filters["dealOffer"] as? Bool
+        sortBy = filters["sortBy"] as? YelpSortMode ?? YelpSortMode.bestMatched
+        distance = filters["distance"] as? YelpDistanceMode
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: coordinate, limit: nil, offset: nil, completion: {
             (businesses: [Business]?, error: Error?) -> Void in
             self.businesses = businesses
             self.searchedBusinesses = businesses
-            if let distance = filters["distance"] {
-                self.filterByDistance(distance as! YelpDistanceMode)
+            if let distance = self.distance {
+                self.filterByDistance(distance)
             }
             self.tableView.reloadData()
             self.setupMapAnnotations()
