@@ -207,7 +207,7 @@ extension BusinessesViewController:CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first {
             coordinate = Coordinate(location: location.coordinate)
-            let span = MKCoordinateSpan(latitudeDelta: 0.005, longitudeDelta: 0.005)
+            let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
             let region = MKCoordinateRegion(center: location.coordinate, span: span)
             mapView.setRegion(region, animated: false)
             searchRestaurants()

@@ -56,6 +56,9 @@ class BusinessDetailViewController: UIViewController {
         restaurantImageView.layer.masksToBounds = true
         snippetImageView.layer.cornerRadius = 25
         restaurantImageView.layer.cornerRadius = 32
+        if let coordinate = business.coordinate {
+            setupMapView(coordinate: coordinate)
+        }
     }
 
     override func viewDidLoad() {
@@ -63,6 +66,7 @@ class BusinessDetailViewController: UIViewController {
 
         // Handle rotation for mapview
         NotificationCenter.default.addObserver(self, selector: #selector(BusinessDetailViewController.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+        mapView.delegate = self
         setBusinessDetails()
     }
     
@@ -74,5 +78,41 @@ class BusinessDetailViewController: UIViewController {
             mapView.isHidden = false
         }
     }
+    
+    private func setupMapView(coordinate: Coordinate) {
+        let clCoordinate = coordinate.toCLLocationCoordinate2D()
+        let annotation = YelpAnnotation(business: business!, coordinate: clCoordinate!)
+        mapView.addAnnotation(annotation)
+        
+        let span = MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)
+        let region = MKCoordinateRegion(center: clCoordinate!, span: span)
+        mapView.setRegion(region, animated: false)
+    }
 
+}
+
+// MARK - MKMapViewDelegate
+extension BusinessDetailViewController:MKMapViewDelegate {
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
+        if annotation is MKUserLocation {
+            return nil
+        }
+        
+        let identifier = "customAnnotationView"
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        if (annotationView == nil) {
+            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+            annotationView?.canShowCallout = true
+        }
+        else {
+            annotationView!.annotation = annotation
+        }
+    
+        annotationView!.image = UIImage(named: "map_pin")
+        
+        return annotationView
+    }
+    
 }
