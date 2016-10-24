@@ -48,16 +48,24 @@ class BusinessDetailViewController: UIViewController {
             openStatusLabel.text = "Maybe"
         }
         snippetTextLabel.text = business.snippetText
-        reviewsNameLabel.text = "\(business.reviewCount!) Reviews"
-        ratingImageView.setImageWith(business.ratingImageURL!)
-        restaurantImageView.setImageWith(business.imageURL!)
-        snippetImageView.setImageWith(business.snippetImageURL!)
         snippetImageView.layer.masksToBounds = true
         restaurantImageView.layer.masksToBounds = true
         snippetImageView.layer.cornerRadius = 25
         restaurantImageView.layer.cornerRadius = 32
         if let coordinate = business.coordinate {
             setupMapView(coordinate: coordinate)
+        }
+        if let totalReviews = business.reviewCount {
+            reviewsNameLabel.text = "\(totalReviews) Reviews"
+        }
+        if let ratingURL = business.ratingImageURL {
+            ratingImageView.setImageWith(ratingURL)
+        }
+        if let businessURL = business.imageURL {
+            restaurantImageView.setImageWith(businessURL)
+        }
+        if let snippetURL = business.snippetImageURL {
+            snippetImageView.setImageWith(snippetURL)
         }
     }
 

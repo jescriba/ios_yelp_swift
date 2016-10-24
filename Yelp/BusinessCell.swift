@@ -24,9 +24,15 @@ class BusinessCell: UITableViewCell {
             addressLabel.text = business.address
             categoriesLabel.text = business.categories
             distanceLabel.text = business.distance
-            reviewsCountLabel.text = "\(business.reviewCount!) Reviews"
-            ratingImageView.setImageWith(business.ratingImageURL!)
-            thumbImageView.setImageWith(business.imageURL!)
+            if let totalReviews = business.reviewCount {
+                reviewsCountLabel.text = "\(totalReviews) Reviews"
+            }
+            if let ratingURL = business.ratingImageURL {
+                ratingImageView.setImageWith(ratingURL)
+            }
+            if let businessURL = business.imageURL {
+                thumbImageView.setImageWith(businessURL)
+            }
         }
     }
     

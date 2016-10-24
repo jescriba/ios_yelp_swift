@@ -23,6 +23,8 @@ class BusinessesViewController: UIViewController {
     internal var dealOffer: Bool?
     internal var sortBy: YelpSortMode? = YelpSortMode.bestMatched
     internal var distance: YelpDistanceMode?
+    internal var loading: Bool! = false
+    internal var hasMoreBusinesses: Bool! = true
     private var locationManager : CLLocationManager!
     private var searchBar: UISearchBar!
     private var refreshControl: UIRefreshControl!
@@ -72,11 +74,21 @@ class BusinessesViewController: UIViewController {
         searchedBusinesses = businesses
     }
     
-    internal func searchRestaurants() {
+    internal func searchRestaurantsWithOffset(_ offset: Int?) {
+        loading = true
         CircularSpinner.show("Loading...", animated: true, type: .indeterminate)
-        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: coordinate, limit: nil, offset: nil, completion: { (businesses: [Business]?, error: Error?) -> Void in
-            self.businesses = businesses
-            self.searchedBusinesses = businesses
+        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: coordinate, limit: nil, offset: offset, completion: { (businesses: [Business]?, error: Error?) -> Void in
+            
+            if offset != nil {
+                let newBusinesses = businesses ?? [Business]()
+                self.hasMoreBusinesses = !newBusinesses.isEmpty
+                self.businesses = self.businesses + newBusinesses
+                self.searchedBusinesses = self.searchedBusinesses + newBusinesses
+            } else {
+                self.businesses = businesses
+                self.searchedBusinesses = businesses
+            }
+            
             if let distance = self.distance {
                 self.filterByDistance(distance)
             }
@@ -84,12 +96,19 @@ class BusinessesViewController: UIViewController {
             self.tableView.reloadData()
             self.setupMapAnnotations()
             self.refreshControl.endRefreshing()
+            self.loading = false
         })
+    }
+    
+    // -1 rather than Int? to make objective c happy
+    @objc internal func searchRestaurants() {
+        searchRestaurantsWithOffset(nil)
     }
     
     internal func setupMapAnnotations() {
         mapView.removeAnnotations(mapView.annotations)
-        for business in searchedBusinesses {
+        guard let searchResults = searchedBusinesses else { return }
+        for business in searchResults {
             let businessCoordinate = business.coordinate?.toCLLocationCoordinate2D()
             if businessCoordinate != nil {
                 let annotation = YelpAnnotation(business: business, coordinate: businessCoordinate!)
@@ -158,6 +177,13 @@ extension BusinessesViewController:UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BusinessCell", for: indexPath) as! BusinessCell
         cell.business = searchedBusinesses[indexPath.row]
         
+        let totalCellCount = searchedBusinesses?.count ?? 0
+        // HasMoreBusiness to prevent continuously searching restaurants if the 
+        // filter or whatever doesn't have more businesses to add
+        if indexPath.row == totalCellCount - 1 && !loading && hasMoreBusinesses {
+            searchRestaurantsWithOffset(totalCellCount - 1)
+        }
+        
         return cell
     }
     
@@ -171,16 +197,8 @@ extension BusinessesViewController:FiltersViewControllerDelegate {
         dealOffer = filters["dealOffer"] as? Bool
         sortBy = filters["sortBy"] as? YelpSortMode ?? YelpSortMode.bestMatched
         distance = filters["distance"] as? YelpDistanceMode
-        Business.searchWithTerm(term: "Restaurants", sort: sortBy, categories: categories, deals: dealOffer, coordinate: coordinate, limit: nil, offset: nil, completion: {
-            (businesses: [Business]?, error: Error?) -> Void in
-            self.businesses = businesses
-            self.searchedBusinesses = businesses
-            if let distance = self.distance {
-                self.filterByDistance(distance)
-            }
-            self.tableView.reloadData()
-            self.setupMapAnnotations()
-        })
+        hasMoreBusinesses = true // Reset because of potentially new filter
+        searchRestaurants()
     }
     
 }
