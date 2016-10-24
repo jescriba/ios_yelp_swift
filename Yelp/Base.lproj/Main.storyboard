@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1vU-Ch-VNo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16B2555" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="1vU-Ch-VNo">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
@@ -25,7 +25,7 @@
                                         <rect key="frame" x="0.0" y="92" width="375" height="129"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="goS-d5-SgK" id="C9m-mo-6Ld">
-                                            <frame key="frameInset" width="375" height="128"/>
+                                            <frame key="frameInset" width="375" height="128.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="49p-xe-9px">
@@ -163,10 +163,10 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SwitchCell" rowHeight="50" id="Jbw-nf-TtV" customClass="SwitchCell" customModule="Yelp" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="50"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Jbw-nf-TtV" id="neE-2K-5om">
-                                            <frame key="frameInset" width="1000" height="49"/>
+                                            <frame key="frameInset" width="375" height="49.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="knw-Xl-RMd">
@@ -376,7 +376,7 @@
                             <constraint firstAttribute="trailing" secondItem="bCy-Si-kgd" secondAttribute="trailing" id="HY8-VD-Ucy"/>
                             <constraint firstItem="HLq-R4-zVJ" firstAttribute="leading" secondItem="Ter-tq-ctR" secondAttribute="leading" constant="15" id="IDw-yJ-6Sl"/>
                             <constraint firstItem="LA7-ZS-D4U" firstAttribute="leading" secondItem="Pgp-Yh-KPF" secondAttribute="trailing" constant="10" id="Jpf-TG-AJC"/>
-                            <constraint firstItem="bCy-Si-kgd" firstAttribute="top" secondItem="hAE-6n-AJH" secondAttribute="bottom" constant="57" id="LuB-cE-Nux"/>
+                            <constraint firstItem="bCy-Si-kgd" firstAttribute="top" secondItem="hAE-6n-AJH" secondAttribute="bottom" constant="15" id="LuB-cE-Nux"/>
                             <constraint firstItem="xhb-Q4-fi8" firstAttribute="top" secondItem="lPs-44-Okt" secondAttribute="bottom" constant="8" id="MwI-Qo-PVq"/>
                             <constraint firstItem="LXT-mw-EwF" firstAttribute="leading" secondItem="Ter-tq-ctR" secondAttribute="leading" constant="15" id="SgV-61-zlA"/>
                             <constraint firstAttribute="trailing" secondItem="hAE-6n-AJH" secondAttribute="trailing" constant="15" id="U7m-7s-BdJ"/>
