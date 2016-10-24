@@ -11,15 +11,23 @@ import UIKit
 class Business: NSObject {
     let name: String?
     let address: String?
+    let displayPhone: String?
+    let snippetText: String?
     let coordinate: Coordinate?
     let imageURL: URL?
     let categories: String?
     let distance: String?
     let ratingImageURL: URL?
+    let snippetImageURL: URL?
     let reviewCount: NSNumber?
+    let isClosed: Bool?
     
     init(dictionary: NSDictionary) {
         name = dictionary["name"] as? String
+        displayPhone = dictionary["display_phone"] as? String
+        snippetText = dictionary["snippet_text"] as? String
+        isClosed = dictionary["is_closed"] as? Bool
+        
         
         let imageURLString = dictionary["image_url"] as? String
         if imageURLString != nil {
@@ -75,6 +83,13 @@ class Business: NSObject {
             ratingImageURL = URL(string: ratingImageURLString!)
         } else {
             ratingImageURL = nil
+        }
+        
+        let snippetImageURLString = dictionary["snippet_image_url"] as? String
+        if snippetImageURLString != nil {
+            snippetImageURL = URL(string: snippetImageURLString!)
+        } else {
+            snippetImageURL = nil
         }
         
         reviewCount = dictionary["review_count"] as? NSNumber

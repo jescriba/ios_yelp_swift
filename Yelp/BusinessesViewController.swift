@@ -21,6 +21,7 @@ class BusinessesViewController: UIViewController {
     internal var coordinate: Coordinate = Coordinate.sanFrancisco()
     private var locationManager : CLLocationManager!
     private var searchBar: UISearchBar!
+    private var refreshControl: UIRefreshControl!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,6 +48,10 @@ class BusinessesViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(BusinessesViewController.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
 
         setUpMapView()
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(searchRestaurants), for: .valueChanged)
+        tableView.insertSubview(refreshControl, at: 0)
     }
     
     internal func rotated() {
@@ -70,6 +75,7 @@ class BusinessesViewController: UIViewController {
             self.searchedBusinesses = businesses
             CircularSpinner.hide()
             self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
         })
     }
     
@@ -183,6 +189,7 @@ extension BusinessesViewController:UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        setupMapAnnotations()
         searchBar.endEditing(true)
     }
     
