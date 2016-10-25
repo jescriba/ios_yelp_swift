@@ -52,9 +52,6 @@ class BusinessDetailViewController: UIViewController {
         restaurantImageView.layer.masksToBounds = true
         snippetImageView.layer.cornerRadius = 25
         restaurantImageView.layer.cornerRadius = 32
-        if let coordinate = business.coordinate {
-            setupMapView(coordinate: coordinate)
-        }
         if let totalReviews = business.reviewCount {
             reviewsNameLabel.text = "\(totalReviews) Reviews"
         }
@@ -67,6 +64,9 @@ class BusinessDetailViewController: UIViewController {
         if let snippetURL = business.snippetImageURL {
             snippetImageView.setImageWith(snippetURL)
         }
+        if let coordinate = business.coordinate {
+            setupMapView(coordinate: coordinate)
+        }
     }
 
     override func viewDidLoad() {
@@ -76,6 +76,13 @@ class BusinessDetailViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(BusinessDetailViewController.rotated), name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
         mapView.delegate = self
         setBusinessDetails()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        mapView.setNeedsLayout()
+        mapView.layoutIfNeeded()
     }
     
     @objc private func rotated() {
