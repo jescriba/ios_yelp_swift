@@ -68,8 +68,11 @@ class BusinessesViewController: UIViewController {
         let distanceDescription = yelpDistance.simpleDescription()
         let distance = Double(distanceDescription.components(separatedBy: " ").first!)
         businesses = businesses.filter({ (business:Business) -> Bool in
-            let businessDistance = Double((business.distance?.components(separatedBy: " ").first!)!)
-            return businessDistance! < distance!
+            let businessDistanceString = business.distance?.components(separatedBy: " ").first
+            guard let dist = distance else { return false }
+            guard let businessDistString = businessDistanceString else { return false }
+            let businessDistance = Double(businessDistString)
+            return businessDistance! < dist
         })
         searchedBusinesses = businesses
     }
