@@ -100,7 +100,6 @@ class BusinessesViewController: UIViewController {
         })
     }
     
-    // -1 rather than Int? to make objective c happy
     @objc internal func searchRestaurants() {
         searchRestaurantsWithOffset(nil)
     }
@@ -180,8 +179,8 @@ extension BusinessesViewController:UITableViewDataSource {
         let totalCellCount = searchedBusinesses?.count ?? 0
         // HasMoreBusiness to prevent continuously searching restaurants if the 
         // filter or whatever doesn't have more businesses to add
-        if indexPath.row == totalCellCount - 1 && !loading && hasMoreBusinesses {
-            searchRestaurantsWithOffset(totalCellCount - 1)
+        if indexPath.row == totalCellCount - 1 && !loading && hasMoreBusinesses && tableView.isDragging {
+            searchRestaurantsWithOffset(totalCellCount)
         }
         
         return cell
